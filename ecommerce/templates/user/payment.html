@@ -1,0 +1,80 @@
+{% extends 'user/userindex.html' %}
+{% load static %}
+{% block title %} Payment {% endblock %}
+{% block content %}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-warning text-white">
+                    <h5 class="mb-0">Confirm Order</h5>
+                </div>
+                <div class="card-body">
+                    <p class="lead">Are you sure you want to confirm your order?</p>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Order Summary:</strong></p>
+                            <!-- Add your order summary details here -->
+                            <ul class="list-group mb-3">
+                                {% for item in cart_items %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    {{ item.product.productname }}
+                                    <span class="badge bg-info">Quantity: {{ item.quantity }}</span>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Delivery Address:</strong></p>
+                            <!-- Add delivery address details here -->
+
+                            <p>{{address.customer_name}}</p>
+                            <p>{{address.street}}, {{address.landmark}},</p>
+                            <p>{{address.city}}, {{address.state}}, {{address.country}} - {{address.pincode}}</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <button id="confirm-order" class="btn btn-success me-4">Yes, Confirm Order</button>
+                        <a href="{% url 'cancel_payment' %}" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Razorpay payment integration script -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    var options = {
+        "key": "rzp_test_93atKPgF1eLJ4M", // Enter the Key ID generated from the Dashboard
+        "amount": "{{total_amount_pay}}", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+        "currency": "INR",
+        "name": "Multi Shop Pay",
+        "description": "Test Transaction",
+        "image": "{% static 'images/pay_logo.png' %}",
+        "order_id": "{{data}}", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+        "callback_url": "{{callbackurl}}",
+        "prefill": {
+            "name": "{{userprofile.profileName}}",
+            "email": "{{user.email}}",
+            "contact": "{{userprofile.phone}}"
+        },
+        "notes": {
+            "address": "{{userprofile.address}}",
+        },
+        "theme": {
+            "color": "#FF004D"
+        }
+    };
+    var rzp1 = new Razorpay(options);
+    document.getElementById('confirm-order').onclick = function (e) {
+        // Open Razorpay payment modal only when the user confirms the order
+        rzp1.open();
+        e.preventDefault();
+    }
+</script>
+{% endblock %}

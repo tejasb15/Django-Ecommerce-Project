@@ -1,0 +1,132 @@
+{% extends 'user/userindex.html' %}
+{% block title %} Cart {% endblock %}
+{% block content %}
+{% load static %}
+
+{% if messages %}
+{% for message in messages %}
+<script>
+    alert('{{ message }}');
+</script>
+{% endfor %}
+{% endif %}
+
+{% if count_cart %}
+<!-- Breadcrumb Start -->
+<div class="container-fluid mt-3 mb-3">
+    <div class="row px-xl-5">
+        <div class="col-12">
+            <nav aria-label="breadcrumb" style="background-color: #ffffff;">
+                <ol class="breadcrumb  px-3 py-3">
+                    <li class="breadcrumb-item"><a href="#" class="text-dark text-decoration-none">Home</a></li>
+                    <li class="breadcrumb-item"><a href="#" class="text-dark text-decoration-none">Shop</a></li>
+                    <li class="breadcrumb-item active text-dark" aria-current="page">Shopping Cart</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb End -->
+
+<!-- Cart Start -->
+<div class="container-fluid">
+    <div class="row px-xl-5">
+        <div class="col-lg-8 table-responsive mb-5">
+            <table class="table table-borderless table-hover text-center mb-0" style="background-color: #ffffff;">
+                <thead class="table-dark">
+                    <tr>
+                        <th colspan="2">Products</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                        <th>Remove</th>
+                    </tr>
+                </thead>
+                <tbody class="align-middle">
+
+                    {% for item in cart_items %}
+                    <tr>
+                        <td class="align-middle">
+                            <img src="{{item.product.pimage_thumbnail.url}}" alt="" style="width: 50px;">
+                        </td>
+                        <td class="align-middle text-start">
+                            {{ item.product.productname }}
+                        </td>
+                        <td class="align-middle"><i class="bi bi-currency-rupee"></i>{{item.product.price}}</td>
+                        <td class="align-middle">
+                            <form method="post" action="{% url 'update-cart' %}">
+                                {% csrf_token %}
+                                <div class="input-group quantity mx-auto" style="width: 100px;">
+                                    <div class="input-group-btn">
+                                        <button type="submit" name="action" value="minus"
+                                            class="btn btn-sm btn-warning btn-minus">
+                                            <i class="fa fa-minus"></i>
+                                        </button>
+                                    </div>
+                                    <input type="hidden" name="cart_item_id" value="{{ item.id }}">
+                                    <input type="text" class="form-control form-control-sm border-0 text-center"
+                                        value="{{ item.quantity }}" readonly>
+                                    <div class="input-group-btn">
+                                        <button type="submit" name="action" value="plus"
+                                            class="btn btn-sm btn-warning btn-plus">
+                                            <i class="fa fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </td>
+                        <td class="align-middle">
+                            <i class="bi bi-currency-rupee"></i>{{ item.total_amount }}
+                        </td>
+                        <td class="align-middle"><a href="{% url 'remove-cart' item.id %}"
+                                class="btn btn-sm btn-danger"><i class="fa fa-times"></i></a></td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+        <div class="col-lg-4">
+
+            <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-light pe-3">Cart
+                    Summary</span></h5>
+            <div class="p-30 mb-5" style="background-color: #ffffff;">
+                <div class="border-bottom pb-2">
+                    <div class="d-flex justify-content-between mb-3">
+                        <h6>Subtotal</h6>
+                        <h6><i class="bi bi-currency-rupee"></i>{{ total_cart_amount }}</h6>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <h6 class="fw-medium">Shipping</h6>
+                        <h6 class="fw-medium">{% if shipping_charge == 0 %} FREE {% else %} <i
+                                class="bi bi-currency-rupee"></i>{{shipping_charge}}{% endif %}</h6>
+                    </div>
+                </div>
+                <div class="pt-2">
+                    <div class="d-flex justify-content-between mt-2">
+                        <h5>Total</h5>
+                        <h5><i class="bi bi-currency-rupee"></i>{{ total_amount_pay }}</h5>
+                    </div>
+                    <a href="{% url 'checkout' %}" class="btn btn-warning w-100 fw-bold my-3 py-3">Proceed To
+                        Checkout</a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
+
+
+<div class="empty-cart-container">
+    <img src="{% static 'images/empty_cart.png' %}" style="width: 25%;" alt="Empty Cart" class="img-fluid">
+    <h4 class="empty-cart-message">Your cart is empty!</h4>
+    <p class="empty-cart-message">Add items to it now.</p>
+    <a href="{% url 'userindex' %}" class="btn btn-warning fw-bold">Shop now</a>
+</div>
+
+{% endif %}
+<!-- Cart End -->
+
+{% endblock %}

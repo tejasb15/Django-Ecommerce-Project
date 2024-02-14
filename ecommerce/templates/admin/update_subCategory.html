@@ -1,0 +1,64 @@
+{% extends 'admin/adminbase.html' %}
+{% load widget_tweaks %}
+{% block admincontent %}
+{% if messages %}
+{% for message in messages %}
+<script>
+    alert('{{ message }}');
+</script>
+{% endfor %}
+{% endif %}
+
+<!-- Breadcrumb Start -->
+<div class="container-fluid pt-3 px-4">
+    <div class="row bg-light rounded mx-0">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb bg-light pt-3 mb-3">
+                    <li class="breadcrumb-item"><a href="#" class="text-dark text-decoration-none">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="#" class="text-dark text-decoration-none">Sub Category</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Update Sub Category</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb End -->
+
+
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-light rounded p-4">
+        <div class="d-flex align-items-center justify-content-between mb-5">
+            <h3 class="mb-0">Update Sub Category</h3>
+            <a href="/admin-subcategory/" class="btn btn-info"><i class="bi bi-arrow-90deg-left me-2"></i>Back</a>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <form action="" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="subcatname" class="form-label">Sub Category Name</label>
+                        {% render_field subcategoryForm.subcatname class="form-control" id="subcatname" %}
+                    </div>
+                    <div class="mb-3">
+                        <label for="image" class="form-label">Sub Category Image</label>
+                        {% render_field subcategoryForm.image class="form-control" id="image" %}
+                    </div>
+                    <div class="mb-3">
+                        <label for="catname" class="form-label">Category Name</label>
+                        {% render_field subcategoryForm.category class="form-control" id="catname" %}
+                    </div>
+                    <div class="mt-4 mb-3">
+                        <button type="submit" class="btn btn-outline-success me-3"><i
+                                class="bi bi-plus-circle me-1"></i>
+                            Update</button>
+                        <button type="reset" class="btn btn-secondary"><i class="bi bi-x-circle me-1"></i>
+                            Reset</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

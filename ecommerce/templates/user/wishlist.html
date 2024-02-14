@@ -1,0 +1,93 @@
+{% extends 'user/userindex.html' %}
+{% load static %}
+{% block title %} Wishlist {% endblock %}
+{% block content %}
+
+
+{% if messages %}
+{% for message in messages %}
+<script>
+    alert('{{ message }}');
+</script>
+{% endfor %}
+{% endif %}
+
+{% if count_wishlist %}
+
+<!-- Breadcrumb Start -->
+<div class="container-fluid mt-3 mb-3">
+    <div class="row px-xl-5">
+        <div class="col-12">
+            <nav aria-label="breadcrumb" style="background-color: #ffffff;">
+                <ol class="breadcrumb  px-3 py-3">
+                    <li class="breadcrumb-item"><a href="#" class="text-dark text-decoration-none">Home</a></li>
+                    <li class="breadcrumb-item"><a href="#" class="text-dark text-decoration-none">Shop</a></li>
+                    <li class="breadcrumb-item active text-dark" aria-current="page">Wishlist</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb End -->
+
+
+
+<!-- Wishlist start -->
+
+<div class="container-fluid mt-3">
+    <h5 class="section-title position-relative mx-xl-5 mb-3">
+        <span class="bg-light pe-3 fs-4">My Wishlist</span>
+    </h5>
+    <div class="row px-xl-5">
+        <div class="col-lg-12">
+            {% for item in wish_items %}
+            <div class="card mb-4 shadow">
+                <div class="row">
+                    <div class="col-md-4 py-2">
+                        <div class="row g-0">
+                            <div class="col-md-12 mb-3 mb-md-0 text-center">
+                                <img src="{{ item.product.pimage_thumbnail.url }}" class="img-fluid"
+                                    style="max-width: 45%; aspect-ratio: 1;" alt="Product Image">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body d-flex flex-column justify-content-between h-100">
+                            <div>
+                                <h5 class="card-title"><a class="text-decoration-none text-dark"
+                                        href="{% url 'detail' item.product.id %}">{{ item.product.productname }}</a>
+                                </h5>
+                                <p class="card-text fw-medium mt-3 fs-5"><i
+                                        class="bi bi-currency-rupee"></i>{{item.product.price}}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="card-footer d-flex justify-content-end">
+                            <a href="{% url 'remove-wishlist' item.id %}" class="btn btn-outline-danger me-2">Remove <i
+                                    class="bi bi-x-circle"></i></a>
+                            <a href="{% url 'add-cart' item.product.id %}" class="btn btn-outline-primary">Add to Cart
+                                <i class="bi bi-cart-plus"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- wishlist end -->
+
+{% else %}
+
+<div class="empty-cart-container">
+    <img src="{% static 'images/empty_cart.png' %}" style="width: 25%;" alt="Empty Cart" class="img-fluid">
+    <h4 class="empty-cart-message">Your wishlist is empty!</h4>
+    <p class="empty-cart-message">You have no items in your wishlist. Start adding!</p>
+</div>
+
+{% endif %}
+
+{% endblock %}

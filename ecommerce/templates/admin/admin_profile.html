@@ -1,0 +1,282 @@
+{% extends 'admin/adminbase.html' %}
+{% load widget_tweaks %}
+{% block title %}profile{% endblock %}
+
+{% block admincontent %}
+{% load static %}
+
+{% if messages %}
+{% for message in messages %}
+<script>
+    alert('{{ message }}');
+</script>
+{% endfor %}
+{% endif %}
+
+<!-- Breadcrumb Start -->
+<div class="container-fluid pt-3 px-4">
+    <div class="row bg-light rounded mx-0">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb bg-light pt-3 mb-3">
+                    <li class="breadcrumb-item"><a href="#" class="text-dark text-decoration-none">Dashboard</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Profile</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb End -->
+
+
+
+<div class="container-fluid pt-4 px-4  profile">
+    <div class="bg-light rounded p-4">
+        <div class="row px-xl-5">
+            <div class="col-xl-4">
+                <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">'
+                    {% if userprofile.profileImage %}
+                    <img src="{{ userprofile.profileImage.url }}" class="rounded-circle">
+                    {% else %}
+                    <img src="{% static 'images/profile_img.jpg' %}" class="rounded-circle">
+                    {% endif %}
+                    {% if userprofile.profileName %}
+                    <h2 class="mt-3">{{userprofile.profileName | default:"NA"}}</h2>
+                    {% endif %}
+                    <h4 class="mt-3 text-secondary">{{user.username}}</h4>
+                </div>
+            </div>
+
+            <div class="col-xl-8">
+                <div class="card-body pt-3">
+                    <!-- Bordered Tabs -->
+                    <ul class="nav nav-tabs nav-tabs-bordered" id="myTabs">
+                        <li class="nav-item">
+                            <button class="nav-link active" id="overview-tab" data-bs-toggle="tab"
+                                data-bs-target="#profile-overview">Overview</button>
+                        </li>
+
+
+                        <li class="nav-item">
+                            <button class="nav-link" id="edit-tab" data-bs-toggle="tab"
+                                data-bs-target="#profile-edit">Edit
+                                Profile</button>
+                        </li>
+
+                        <li class="nav-item">
+                            <button class="nav-link" id="password-tab" data-bs-toggle="tab"
+                                data-bs-target="#profile-change-password">Change Password</button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content pt-2">
+                        <div class="tab-pane fade show active profile-overview" id="profile-overview">
+
+
+                            <h5 class="card-title mb-3 mt-2">About</h5>
+                            <p class="small fst-italic">{{userprofile.bio | default:"NA"}}</p>
+
+                            <h5 class="card-title mb-3">Profile Details</h5>
+
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 label ">Name</div>
+                                <div class="col-lg-9 col-md-8">{{userprofile.profileName | default:"NA"}}</div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 label ">Gender</div>
+                                <div class="col-lg-9 col-md-8">{{userprofile.gender | default:"NA"}}</div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 label">Country</div>
+                                <div class="col-lg-9 col-md-8">{{userprofile.country | default:"NA"}}</div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 label">Address</div>
+                                <div class="col-lg-9 col-md-8">{{userprofile.address | default:"NA"}}</div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 label">Phone</div>
+                                <div class="col-lg-9 col-md-8">{{userprofile.phone | default:"NA"}}</div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 label">Email</div>
+                                <div class="col-lg-9 col-md-8">{{user.email | default:"NA"}}</div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
+                            <form action="" method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="row mb-3">
+                                    <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Profile
+                                        Image</label>
+
+                                    <div class="col-md-8 col-lg-9">
+                                        {% if userprofile.profileImage %}
+                                        <img src="{{userprofile.profileImage.url}}" class="rounded-circle"
+                                            id="profile-preview">
+                                        {% else %}
+                                        <img src="{% static 'images/profile_img.jpg' %}" class="rounded-circle"
+                                            id="profile-preview">
+                                        {% endif %}
+
+                                        <div class="pt-2">
+                                            <!-- Your existing profileForm rendering -->
+                                            {% render_field profileForm.profileImage class="d-none" %}
+
+                                            <!-- Upload new profile image button -->
+                                            <label for="id_profileImage" class="btn btn-warning btn-sm"
+                                                title="Upload new profile image">
+                                                <i class="bi bi-upload"></i>
+                                            </label>
+
+                                            <!-- Remove profile image button -->
+                                            <a href="#" class="btn btn-danger btn-sm" title="Remove my profile image"
+                                                id="remove-profile-image">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Full
+                                        Name</label>
+                                    <div class="col-md-8 col-lg-9">
+                                        {% render_field profileForm.profileName class="form-control" id="fullName" %}
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label for="about" class="col-md-4 col-lg-3 col-form-label">About</label>
+                                    <div class="col-md-8 col-lg-9">
+                                        {% render_field profileForm.bio class="form-control h-10" id="about" %}
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label for="gender" class="col-md-4 col-lg-3 col-form-label">Gender</label>
+                                    <div class="col-md-8 col-lg-9">
+                                        {% render_field profileForm.gender type="radio" id="gender" %}
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label for="country" class="col-md-4 col-lg-3 col-form-label">Country</label>
+                                    <div class="col-md-8 col-lg-9">
+                                        {% render_field profileForm.country class="form-control" id="country" %}
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label for="Address" class="col-md-4 col-lg-3 col-form-label">Address</label>
+                                    <div class="col-md-8 col-lg-9">
+                                        {% render_field profileForm.address class="form-control" id="Address" %}
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label for="Phone" class="col-md-4 col-lg-3 col-form-label">Phone</label>
+                                    <div class="col-md-8 col-lg-9">
+                                        {% render_field profileForm.phone class="form-control" id="Phone" %}
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label for="Email" class="col-md-4 col-lg-3 col-form-label">Email</label>
+                                    <div class="col-md-8 col-lg-9">
+                                        {% render_field userForm.email class="form-control" id="Email" %}
+                                    </div>
+                                </div>
+
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-warning">Save Changes</button>
+                                </div>
+                            </form>
+
+                        </div>
+
+                        <div class="tab-pane fade pt-3" id="profile-change-password">
+
+                            <form action="" method="post">
+                                {% csrf_token %}
+                                <div class="row mb-3">
+                                    <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Current
+                                        Password</label>
+                                    <div class="col-md-8 col-lg-9">
+                                        <input name="oldpassword" type="password" class="form-control"
+                                            id="currentPassword">
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">New
+                                        Password</label>
+                                    <div class="col-md-8 col-lg-9">
+                                        <input name="newpassword" type="password" class="form-control" id="newPassword">
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label for="renewPassword" class="col-md-4 col-lg-3 col-form-label">Re-enter
+                                        New
+                                        Password</label>
+                                    <div class="col-md-8 col-lg-9">
+                                        <input name="renewpassword" type="password" class="form-control"
+                                            id="renewPassword">
+                                    </div>
+                                </div>
+
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-success">Change Password</button>
+                                </div>
+                            </form>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Add event listener to handle file selection
+    document.getElementById('id_profileImage').addEventListener('change', handleFileSelect);
+
+    // Add event listener to handle removing profile image
+    document.getElementById('remove-profile-image').addEventListener('click', removeProfileImage);
+
+    function handleFileSelect(event) {
+        const fileInput = event.target;
+        const file = fileInput.files[0];
+
+        if (file) {
+            // Display preview of the selected image
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                document.getElementById('profile-preview').src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function removeProfileImage(event) {
+        // Prevent the default action of the link
+        event.preventDefault();
+
+        // Reset the file input and remove the preview
+        document.getElementById('id_profileImage').value = '';
+        document.getElementById('profile-preview').src = "{% static 'images/profile_img.jpg' %}";
+    }
+</script>
+
+
+
+{% endblock %}

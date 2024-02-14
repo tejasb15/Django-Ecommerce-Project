@@ -1,0 +1,154 @@
+{% extends 'user/userindex.html' %}
+{% load static %}
+{% block title %} Checkout {% endblock %}
+{% block content %}
+
+
+{% if messages %}
+{% for message in messages %}
+<script>
+    alert('{{ message }}');
+</script>
+{% endfor %}
+{% endif %}
+
+<!-- Breadcrumb Start -->
+<div class="container-fluid mt-3">
+    <div class="row px-xl-5">
+        <div class="col-12">
+            <nav aria-label="breadcrumb" class="mb-3 px-3" style="background-color: #ffffff;">
+                <ol class="breadcrumb py-3">
+                    <li class="breadcrumb-item"><a href="{% url 'userindex' %}"
+                            class="text-dark text-decoration-none">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'cart' %}"
+                            class="text-dark text-decoration-none">Cart</a></li>
+                    <li class="text-dark breadcrumb-item active" aria-current="page">Checkout</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb End -->
+
+<!-- Checkout Start -->
+<div class="container-fluid">
+    <form action="" method="post">
+        {% csrf_token %}
+        <div class="row px-xl-5">
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">1. Delivery Address</h4>
+                        <div class="address-list mt-4">
+                            {% for address in addresses %}
+                            <label class="form-check">
+                                <input type="radio" class="form-check-input" name="selected_address_id" id="address"
+                                    value="{{ address.id }}" required>
+                                <div class="card mb-2">
+                                    <div class="card-body">
+                                        <h6 class="card-title mb-1" style="font-size: 18px;">{{address.customer_name}}
+                                        </h6>
+                                        <p class="card-text mb-2">{{address.phone}}, {{address.alt_phone}}</p>
+                                        <p class="card-text">
+                                            {{address.street}}, {{address.landmark}}, {{address.city}},
+                                            {{address.state}},
+                                            {{address.country}} - {{address.pincode}}
+                                        </p>
+                                    </div>
+                                </div>
+                            </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <h4 class="card-title">2. Order Summary</h4>
+                        <div class="cart-list mt-4">
+                            {% for item in cart_items %}
+                            <div class="card mb-4">
+                                <div class="row">
+                                    <div class="col-md-3 text-center">
+                                        <img src="{{ item.product.pimage_thumbnail.url }}" class="img-fluid"
+                                            style="max-width: 200px; height: 200px;" alt="Product Image">
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{ item.product.productname }}</h5>
+                                            <p class="card-text fw-medium mt-3 fs-5"><i
+                                                    class="bi bi-currency-rupee"></i>{{item.product.price}}
+                                            </p>
+                                            <p class="card-text"><span class="fw-bold">Quantity</span> :
+                                                {{item.quantity}}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <!-- Order Total Section -->
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-light pe-3">Price
+                        Details</span></h5>
+                <div class="bg-white p-30 mb-5">
+                    <div class="border-bottom">
+                        <h6 class="mb-3">Products</h6>
+                        <div class="d-flex justify-content-between">
+                            <p>Price ( {{count_cart}} item)</p>
+                            <p><i class="bi bi-currency-rupee"></i> {{total_cart_amount}}</p>
+                        </div>
+                    </div>
+                    <div class="border-bottom pt-3 pb-2">
+                        <div class="d-flex justify-content-between mb-3">
+                            <h6>Discount</h6>
+                            <h6>- <i class="bi bi-currency-rupee"></i> {{discount}}</h6>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <h6 class="font-weight-medium">Shipping</h6>
+                            <h6 class="font-weight-medium"><i class="bi bi-currency-rupee"></i> {{shipping_charge}}</h6>
+                        </div>
+                    </div>
+                    <div class="pt-2">
+                        <div class="d-flex justify-content-between mt-2">
+                            <h5>Total</h5>
+                            <h5><i class="bi bi-currency-rupee"></i> {{total_amount_pay}}</h5>
+                        </div>
+                    </div>
+                </div>
+                <!-- Payment Section -->
+                <div class="mb-5">
+                    <h5 class="section-title position-relative text-uppercase mb-3"><span
+                            class="bg-light pe-3">Payment</span>
+                    </h5>
+                    <div class="bg-white p-30">
+                        <div class="form-group mb-4">
+                            <div class="custom-control custom-radio">
+                                <input type="radio" class="custom-control-input" name="payment_method" id="razorpay"
+                                    value="razorpay" required>
+                                <label class="custom-control-label" for="razorpay">RazorPay</label>
+                            </div>
+                        </div>
+                        <div class="form-group mb-4">
+                            <div class="custom-control custom-radio">
+                                <input type="radio" class="custom-control-input" name="payment_method" id="cod"
+                                    value="cod" required>
+                                <label class="custom-control-label" for="cod">Cash on Delivery</label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-block  btn-warning font-weight-bold">Place Order</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Checkout End -->
+
+
+
+{% endblock %}

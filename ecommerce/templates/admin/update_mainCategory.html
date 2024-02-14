@@ -1,0 +1,18 @@
+{% extends 'admin/mainCategory.html' %}
+{% load widget_tweaks %}
+{% block update_cat %}
+<h5 class="mb-4">Update Main Category</h5>
+<form method="post" class="row g-3 needs-validation" novalidate>
+    {% csrf_token %}
+    <div class="col-12">
+        <label for="cname" class="form-label">Category Name</label>
+        {% render_field categoryForm.catname class="form-control" id="cname" %}
+        <div class="invalid-feedback">
+            Please provide a category name.
+        </div>
+    </div>
+    <div class=" text-start mt-4">
+        <button type="submit" class="btn btn-success">Update</button>
+    </div>
+</form>
+{% endblock %}

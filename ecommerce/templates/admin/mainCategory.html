@@ -1,0 +1,84 @@
+{% extends 'admin/adminbase.html' %}
+{% load widget_tweaks %}
+{% block admincontent %}
+{% if messages %}
+{% for message in messages %}
+<script>
+    alert('{{ message }}');
+</script>
+{% endfor %}
+{% endif %}
+<!-- Breadcrumb Start -->
+<div class="container-fluid pt-3 px-4">
+    <div class="row bg-light rounded mx-0">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb bg-light pt-3 mb-3">
+                    <li class="breadcrumb-item"><a href="#" class="text-dark text-decoration-none">Dashboard</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Main Category</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb End -->
+
+<div class="container-fluid pt-4 px-4">
+    <div class="row bg-light rounded px-4 py-4 mx-0">
+        <div class="col-md-6">
+            {% block update_cat %}
+            <h5 class="mb-4">Add Main Category</h5>
+            <form method="post" class="row g-3 needs-validation" novalidate>
+                {% csrf_token %}
+                <div class="col-12">
+                    <label for="cname" class="form-label">Category Name</label>
+                    {% render_field categoryForm.catname class="form-control" id="cname" %}
+                    <div class="invalid-feedback">
+                        Please provide a category name.
+                    </div>
+                </div>
+                <div class="text-start mt-4">
+                    <button type="submit" class="btn btn-success">Add</button>
+                </div>
+            </form>
+            {% endblock %}
+        </div>
+        <div class="col-12 mt-5">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead class="text-center">
+                        <tr>
+                            <th scope="col">Sr.No</th>
+                            <th scope="col">Category Name</th>
+                            <th scope="col" colspan="2">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-center">
+                        {% for i in cat %}
+                        <tr>
+                            <th scope="row">{{i.custom_id}}</th>
+                            <td>{{i.cat_data.catname}}</td>
+                            <td>
+                                <a href="{% url 'update-maincategory' i.cat_data.id %}"
+                                    class="btn btn-outline-primary"><i class="bi bi-pencil-square pe-2"></i>Update</a>
+                            </td>
+                            <td>
+                                <a href="{% url 'delete-maincategory' i.cat_data.id %}"
+                                    class="btn btn-outline-danger"><i class="bi bi-trash3 pe-2"></i>Delete</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+
+{% endblock %}
