@@ -684,7 +684,7 @@ def Add_Cart(request,pk):
         else:
             wish_item = Wishlist.objects.filter(user=user, product=product).first()
             if wish_item:
-                wish_item.delete()
+                wish_item.delete()  
             
             cart_item, created = Cart.objects.get_or_create(user=user, product=product)
 

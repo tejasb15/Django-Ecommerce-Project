@@ -90,7 +90,7 @@ class Address(models.Model):
     state = models.CharField(max_length=255,null=True)
     pincode = models.IntegerField(null=True)
     country = models.CharField(max_length=255,null=True)
-    alt_phone = models.BigIntegerField(null=True)
+    alt_phone = models.BigIntegerField(null=True, blank=True)
 
 
 

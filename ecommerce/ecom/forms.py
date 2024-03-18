@@ -72,3 +72,4 @@ class Address_form(forms.ModelForm):
     class Meta:
         model = Address
         exclude = ['user']
+        fields = ['customer_name', 'phone', 'street', 'landmark','city', 'state','country','pincode','alt_phone']
