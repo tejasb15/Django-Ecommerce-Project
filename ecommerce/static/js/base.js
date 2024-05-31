@@ -68,4 +68,30 @@ $(document).ready(function () {
 
 
 
+document.addEventListener('DOMContentLoaded', function () {
+    const passwordInput = document.getElementById('floatingPassword');
+    const passwordToggle = document.getElementById('passwordToggle');
+
+
+    // Show the eye icon button when password input field is focused
+    passwordInput.addEventListener('focus', function () {
+        passwordToggle.style.display = 'block';
+    });
+
+    passwordInput.addEventListener("blur", function () {
+        passwordToggle.style.display = '';
+    });
+
+
+    // Toggle password visibility when eye icon button is clicked
+    passwordToggle.addEventListener('click', function () {
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            this.innerHTML = '<i class="bi bi-eye-slash"></i>';
+        } else {
+            passwordInput.type = 'password';
+            this.innerHTML = '<i class="bi bi-eye"></i>';
+        }
+    });
+});
 

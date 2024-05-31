@@ -20,6 +20,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 from ecom import views
 
+from django.contrib.auth import views as auth_views
+
 urlpatterns = [         
     path('admin/', admin.site.urls),
 
@@ -67,6 +69,12 @@ urlpatterns = [
     path('signup/',views.Signup_view,name='signup'),
     path('logout/',views.Logout,name='logout'),
     path('profile/',views.Profile,name='profile'),
+
+    path('reset_password/', views.password_reset_request, name='password_reset'),
+    path('reset_password_confirm/<uidb64>/<token>/', views.password_reset_confirm, name='password_reset_confirm'),
+    path('reset_password_complete/', views.password_reset_complete, name='password_reset_complete'),
+    path('password_reset_done/', views.password_reset_done, name='password_reset_done'),
+
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

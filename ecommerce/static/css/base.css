@@ -353,3 +353,11 @@ nav a {
 .empty-cart-message {
     margin-top: 20px;
 }
+
+.input-group-append {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    /* Adjust this value to position the button */
+    transform: translateY(-50%);
+}

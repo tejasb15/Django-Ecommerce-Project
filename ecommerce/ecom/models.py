@@ -26,8 +26,8 @@ class Product(models.Model):
     pimage_thumbnail = models.ImageField(upload_to='ProductImages/',null=True)
     price = models.FloatField(null=True)
     subcategory = models.ForeignKey(Subcategory,on_delete=models.CASCADE)
-    description = RichTextField(null=True)
-    specification = RichTextField(null=True)
+    description = RichTextField(config_name='default',null=True)
+    specification = RichTextField(config_name='default',null=True)
     date = models.DateField(auto_now=True,null=True)
     time = models.TimeField(auto_now=True,null=True)
 

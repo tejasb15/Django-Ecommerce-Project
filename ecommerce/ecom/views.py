@@ -1,4 +1,4 @@
-from django.shortcuts import render,HttpResponseRedirect,HttpResponse,get_object_or_404
+from django.shortcuts import render,HttpResponseRedirect,HttpResponse,redirect,get_object_or_404
 from .models import *
 from .forms import *
 from django.contrib import messages
@@ -8,13 +8,19 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
 from django.core.mail import send_mail
 from django.conf import settings
-from django.contrib.auth import update_session_auth_hash
-from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash,get_user_model
+from django.contrib.auth.forms import PasswordChangeForm,PasswordResetForm, SetPasswordForm
 from django.core.paginator import Paginator
 from datetime import date,timedelta,datetime
 import uuid
 import razorpay
 from django.views.decorators.csrf import csrf_exempt
+
+from django.contrib.auth.tokens import default_token_generator
+from django.template.loader import render_to_string
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_str
+
 # Create your views here.
 
 def userpublic_view(request):
@@ -430,7 +436,6 @@ def checkout(request):
                 'shipping_charge':shipping_charge,
                 'discount':discount,
                 'total_amount':total_amount,
-
             }
 
             return render(request, 'user/checkout.html', context)
@@ -889,6 +894,65 @@ def Login_view(request):
 def Logout(request):
     logout(request)
     return HttpResponseRedirect('/')
+
+
+UserModel = get_user_model()
+
+def password_reset_request(request):
+    if request.method == "POST":
+        password_reset_form = PasswordResetForm(request.POST)
+        if password_reset_form.is_valid():
+            data = password_reset_form.cleaned_data['email']
+            associated_users = UserModel.objects.filter(email=data)
+            if associated_users.exists():
+                for user in associated_users:
+                    subject = "Password Reset Requested"
+                    email_template_name = "user/password_reset_email.html"
+                    c = {
+                        "email": user.email,
+                        'domain': request.get_host(),
+                        'site_name': 'multishop',
+                        "uid": urlsafe_base64_encode(force_bytes(user.pk)),
+                        "user": user,
+                        'token': default_token_generator.make_token(user),
+                        'protocol': 'http',
+                    }
+                    email = render_to_string(email_template_name, c)
+                    try:
+                        send_mail(subject, email, settings.DEFAULT_FROM_EMAIL, [user.email], fail_silently=False)
+                    except BadHeaderError:
+                        return HttpResponse('Invalid header found.')
+                    return redirect("/password_reset_done/")
+    password_reset_form = PasswordResetForm()
+    return render(request=request, template_name="user/password_reset.html", context={"password_reset_form":password_reset_form})
+
+def password_reset_confirm(request, uidb64=None, token=None):
+    if uidb64 is not None and token is not None:
+        try:
+            uid = force_str(urlsafe_base64_decode(uidb64))
+            user = UserModel.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, UserModel.DoesNotExist):
+            user = None
+
+        if user is not None and default_token_generator.check_token(user, token):
+            if request.method == 'POST':
+                form = SetPasswordForm(user, request.POST)
+                if form.is_valid():
+                    form.save()
+                    return redirect('/reset_password_complete/')
+            else:
+                form = SetPasswordForm(user)
+            return render(request, 'user/password_reset_confirm.html', {'form': form})
+        else:
+            return render(request, 'user/password_reset_invalid.html')
+    return redirect('/')
+
+def password_reset_complete(request):
+    return render(request, 'user/password_reset_complete.html')
+
+def password_reset_done(request):
+    return render(request, 'user/password_reset_done.html')
+
 
 def adminbase_view(request):
     if request.user.is_authenticated and request.user.is_superuser:
