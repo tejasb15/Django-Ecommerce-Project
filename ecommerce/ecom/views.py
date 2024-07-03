@@ -1,7 +1,8 @@
+import requests
 from django.shortcuts import render,HttpResponseRedirect,HttpResponse,redirect,get_object_or_404
 from .models import *
 from .forms import *
-from django.contrib import messages
+from django.contrib import messages 
 from django.db.models import Subquery, OuterRef ,Count, Q
 from django.db.models.functions import Random
 from django.contrib.auth.models import User
@@ -599,9 +600,6 @@ def myorder_view(request):
         return HttpResponseRedirect('/')
 
 
-
-
-
 def Search_View(request):
     if request.user.is_authenticated:
         category, subcategory, randsubcat = usernav_view(request)
@@ -846,10 +844,29 @@ def Signup_view(request):
             username = request.POST.get('username')
             email = request.POST.get('email')
             password = request.POST.get('password')
+            recaptcha_response = request.POST.get('g-recaptcha-response')
 
-            User.objects.create_user(username,email,password)
+            if User.objects.filter(username=username).exists():
+                context = {'error': 'Username is already taken.'}
+                return render(request, 'user/signup.html', context)
+            elif User.objects.filter(email=email).exists():
+                context = {'error': 'Email is already registered.'}
+                return render(request, 'user/signup.html', context)
+
+            data = {
+                'secret': settings.RECAPTCHA_PRIVATE_KEY,
+                'response': recaptcha_response
+            }
+
+            r = requests.post('https://www.google.com/recaptcha/api/siteverify',data=data)
+            result = r.json()
             
-            return HttpResponseRedirect('/login/')
+            if result['success']:
+                User.objects.create_user(username=username, email=email, password=password)
+                return HttpResponseRedirect('/login/')
+            else:
+                context = {'error': 'Invalid reCAPTCHA. Please try again.'}
+                return render(request, 'user/signup.html', context)
 
         context = {}
         return render(request,'user/signup.html',context)

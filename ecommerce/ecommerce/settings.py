@@ -16,6 +16,7 @@ import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
 TEMPLATE_DIR = os.path.join(BASE_DIR,'templates')
 STATIC_DIR=os.path.join(BASE_DIR,'static')
 
@@ -45,6 +46,8 @@ INSTALLED_APPS = [
     'ecom',
     'widget_tweaks',
     'ckeditor',
+
+    'social_django'
 ]
 
 MIDDLEWARE = [
@@ -55,6 +58,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 ROOT_URLCONF = 'ecommerce.urls'
@@ -70,6 +75,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -147,3 +155,25 @@ DEFAULT_FROM_EMAIL = 'tejasbharambe1999@gmail.com'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+RECAPTCHA_PUBLIC_KEY = "6Ldt1QYqAAAAAHEuYqAfAsK2KRPSQLh6h6Ix7nT1"
+RECAPTCHA_PRIVATE_KEY = "6Ldt1QYqAAAAAPikProFaoRTMC3JwT29Rsi8dXXe"
+
+
+# Social app  custom settings
+
+AUTHENTICATION_BACKENDS = [
+    'social_core.backends.google.GoogleOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'userindex'
+LOGOUT_URL = 'logout'
+LOGOUT_REDIRECT_URL = '/'
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '1012213637416-rsktmsm7cleb2h87mcajgq3v6s602n14.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
+
+SOCIAL_AUTH_URL_NAMESPACE = 'social'

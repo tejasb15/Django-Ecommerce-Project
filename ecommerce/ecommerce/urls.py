@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path,include
 from django.conf import settings
 from django.conf.urls.static import static
 from ecom import views
@@ -68,6 +68,7 @@ urlpatterns = [
     path('login/',views.Login_view,name='login'),
     path('signup/',views.Signup_view,name='signup'),
     path('logout/',views.Logout,name='logout'),
+    path('social-auth/',include('social_django.urls',namespace='social')),
     path('profile/',views.Profile,name='profile'),
 
     path('reset_password/', views.password_reset_request, name='password_reset'),
