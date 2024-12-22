@@ -38,7 +38,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="D:\Python\ItVedant_Project"
+VIRTUAL_ENV="D:\Python\Ecommerce Django Project"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
@@ -55,9 +55,9 @@ fi
 
 if [ -z "${VIRTUAL_ENV_DISABLE_PROMPT:-}" ] ; then
     _OLD_VIRTUAL_PS1="${PS1:-}"
-    PS1="(ItVedant_Project) ${PS1:-}"
+    PS1="(Ecommerce Django Project) ${PS1:-}"
     export PS1
-    VIRTUAL_ENV_PROMPT="(ItVedant_Project) "
+    VIRTUAL_ENV_PROMPT="(Ecommerce Django Project) "
     export VIRTUAL_ENV_PROMPT
 fi
 

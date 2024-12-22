@@ -68,7 +68,8 @@ urlpatterns = [
     path('login/',views.Login_view,name='login'),
     path('signup/',views.Signup_view,name='signup'),
     path('logout/',views.Logout,name='logout'),
-    path('social-auth/',include('social_django.urls',namespace='social')),
+    # path('social-auth/',include('social_django.urls',namespace='social')),
+
     path('profile/',views.Profile,name='profile'),
 
     path('reset_password/', views.password_reset_request, name='password_reset'),

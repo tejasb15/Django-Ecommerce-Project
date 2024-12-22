@@ -1,7 +1,7 @@
 import requests
 from django.shortcuts import render,HttpResponseRedirect,HttpResponse,redirect,get_object_or_404
 from .models import *
-from .forms import *
+from .forms import *    
 from django.contrib import messages 
 from django.db.models import Subquery, OuterRef ,Count, Q
 from django.db.models.functions import Random
@@ -16,11 +16,11 @@ from datetime import date,timedelta,datetime
 import uuid
 import razorpay
 from django.views.decorators.csrf import csrf_exempt
-
-from django.contrib.auth.tokens import default_token_generator
-from django.template.loader import render_to_string
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.utils.encoding import force_bytes, force_str
+# from django.urls import reverse
+# from django.contrib.auth.tokens import default_token_generator
+# from django.template.loader import render_to_string
+# from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+# from django.utils.encoding import force_bytes, force_str
 
 # Create your views here.
 
@@ -841,6 +841,8 @@ def Signup_view(request):
         return HttpResponseRedirect('/userindex/')
     else:
         if request.method == 'POST':
+            firstname = request.POST.get('firstname')
+            lastname = request.POST.get('lastname')
             username = request.POST.get('username')
             email = request.POST.get('email')
             password = request.POST.get('password')
@@ -862,7 +864,7 @@ def Signup_view(request):
             result = r.json()
             
             if result['success']:
-                User.objects.create_user(username=username, email=email, password=password)
+                User.objects.create_user(firstname=firstname,lastname=lastname,username=username, email=email, password=password)
                 return HttpResponseRedirect('/login/')
             else:
                 context = {'error': 'Invalid reCAPTCHA. Please try again.'}
@@ -870,7 +872,7 @@ def Signup_view(request):
 
         context = {}
         return render(request,'user/signup.html',context)
-
+    
 def Login_view(request):
     if request.user.is_superuser and request.user.is_authenticated:
         return HttpResponseRedirect('/admin-dashboard/')
@@ -878,35 +880,30 @@ def Login_view(request):
         return HttpResponseRedirect('/userindex/')
     else:
         if request.method == 'POST':
-            username = request.POST.get('username')
+            email = request.POST.get('email')
             password = request.POST.get('password')
             remember_me = request.POST.get('remember_me', False)
 
-            user = authenticate(request,username=username,password=password)
-
+            user = authenticate(request, email=email, password=password)
+            print(user)
             if user is not None:
-                login(request,user)
-                
-                if user.is_superuser:
-                    if not remember_me:
-                        request.session.set_expiry(0)
-                    else:
-                        request.session.set_expiry(7 * 24 * 60 * 60)
 
+                login(request, user)
+                
+                if not remember_me:
+                    request.session.set_expiry(0)
+                else:
+                    request.session.set_expiry(7 * 24 * 60 * 60)
+
+                if user.is_superuser:
                     messages.success(request, 'Login successfully')
                     return HttpResponseRedirect('/admin-dashboard/')
                 else:
-                    if not remember_me:
-                        request.session.set_expiry(0)
-                    else:
-                        request.session.set_expiry(7 * 24 * 60 * 60)
-
                     messages.success(request, 'Login successfully')
                     return HttpResponseRedirect('/userindex/')
             else:
-                messages.warning(request, 'Invalid username or password')
-        context = {}
-        return render(request,'user/login.html',context)
+                messages.warning(request, 'Invalid email or password')            
+        return render(request, 'user/login.html')        
 
 def Logout(request):
     logout(request)

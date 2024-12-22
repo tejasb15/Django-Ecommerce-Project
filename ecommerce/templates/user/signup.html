@@ -38,8 +38,8 @@
         <!-- Sign Up Start -->
         <div class="container-fluid">
             <div class="row h-100 align-items-center justify-content-center" style="min-height: 100vh;">
-                <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
-                    <div class="rounded p-4 p-sm-5 my-4 mx-3 border shadow" style="background-color: #ffffff;">
+                <div class="col-12 col-sm-7 col-md-8 col-lg-6 col-xl-5">
+                    <div class="rounded p-4 p-sm-5 my-4 border shadow" style="background-color: #ffffff;">
                         <div class="d-flex align-items-center justify-content-between" style="margin-bottom: 30px;">
                             <a href="/" class="text-decoration-none">
                                 <span class="h2 text-uppercase text-warning bg-dark px-2">Multi</span>
@@ -57,6 +57,28 @@
 
                         <form method="post" class="needs-validation" novalidate>
                             {% csrf_token %}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" name="firstname" id="floatingText"
+                                            placeholder="First Name" required>
+                                        <div class="invalid-feedback">
+                                            Please provide a first name.
+                                        </div>
+                                        <label for="floatingText">First Name</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" name="lastname" id="floatingText"
+                                            placeholder="Last Name" required>
+                                        <div class="invalid-feedback">
+                                            Please provide a last name.
+                                        </div>
+                                        <label for="floatingText">Last Name</label>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="form-floating mb-3">
                                 <input type="text" class="form-control" name="username" id="floatingText"
                                     placeholder="username" required>
@@ -71,7 +93,7 @@
                                 <div class="invalid-feedback">
                                     Please provide a email.
                                 </div>
-                                <label for="floatingInput">Email address</label>
+                                <label for="floatingInput">Email</label>
                             </div>
                             <div class="form-floating mb-4">
                                 <input type="password" class="form-control" name="password" id="floatingPassword"
@@ -81,7 +103,10 @@
                                     Please provide a password.
                                 </div>
                             </div>
-                            <div class="g-recaptcha" data-sitekey="6Ldt1QYqAAAAAHEuYqAfAsK2KRPSQLh6h6Ix7nT1"></div>
+
+                            <div class="g-recaptcha" data-sitekey="6Ldt1QYqAAAAAHEuYqAfAsK2KRPSQLh6h6Ix7nT1">
+                            </div>
+
                             <br>
                             <button type="submit" class="btn btn-warning py-3 w-100 mb-4">Sign Up</button>
                         </form>

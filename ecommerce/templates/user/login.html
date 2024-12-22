@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
@@ -59,11 +60,11 @@
                             {% endfor %}
                             {% endif %}
                             <div class="form-floating mb-3">
-                                <input type="text" name="username" class="form-control" id="floatingInput"
-                                    placeholder="username" required autocomplete="username">
-                                <label for="floatingInput">Username</label>
+                                <input type="email" name="email" class="form-control" id="floatingInput"
+                                    placeholder="Email" required>
+                                <label for="floatingInput">Email</label>
                                 <div class="invalid-feedback">
-                                    Please provide a username.
+                                    Please provide a Email.
                                 </div>
                             </div>
                             <div class="form-floating mb-4 position-relative">
@@ -91,11 +92,10 @@
                                 class="btn btn-warning fs-5 fw-bold text-light text-uppercase w-100 mb-4">Sign
                                 In</button>
                         </form>
-                        <p class="text-center fw-bold mb-0">or with</p>
+                        <p class="text-center fw-bold mb-0">----------- or -----------</p>
                         <br>
                         <p class="text-center mb-0">
-                            <a href="{% url 'social:begin' 'google-oauth2' %}"
-                                class="btn btn-outline-dark border border-2 border-warning rounded mb-4">
+                            <a href="" class="btn btn-outline-dark border border-2 border-warning rounded mb-4">
                                 <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="48" height="48"
                                     viewBox="0 0 48 48">
                                     <path fill="#FFC107"

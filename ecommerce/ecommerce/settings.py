@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'ckeditor',
 
-    'social_django'
+    # 'social_django'
 ]
 
 MIDDLEWARE = [
@@ -58,8 +58,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
-    'social_django.middleware.SocialAuthExceptionMiddleware',
+    # 'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 ROOT_URLCONF = 'ecommerce.urls'
@@ -76,8 +75,9 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
 
-                'social_django.context_processors.backends',
-                'social_django.context_processors.login_redirect',
+# Google Auth
+                # 'social_django.context_processors.backends',
+                # 'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -147,7 +147,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'tejasbharambe1999@gmail.com'
-EMAIL_HOST_PASSWORD = 'lssi xjfh wfex xfem'
+EMAIL_HOST_PASSWORD = 'oggf slxd lyry qiiz'
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'tejasbharambe1999@gmail.com'  
 
@@ -163,17 +163,15 @@ RECAPTCHA_PRIVATE_KEY = "6Ldt1QYqAAAAAPikProFaoRTMC3JwT29Rsi8dXXe"
 
 # Social app  custom settings
 
-AUTHENTICATION_BACKENDS = [
-    'social_core.backends.google.GoogleOAuth2',
-    'django.contrib.auth.backends.ModelBackend',
-]
+# AUTHENTICATION_BACKENDS = [
+#     'social_core.backends.google.GoogleOAuth2',
+#     'django.contrib.auth.backends.ModelBackend',
+# ]
 
-LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = 'userindex'
-LOGOUT_URL = 'logout'
-LOGOUT_REDIRECT_URL = '/'
+# LOGIN_URL = 'login'
+# LOGIN_REDIRECT_URL = 'userindex'
+# LOGOUT_URL = 'logout'
+# LOGOUT_REDIRECT_URL = '/'
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '1012213637416-rsktmsm7cleb2h87mcajgq3v6s602n14.apps.googleusercontent.com'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
-
-SOCIAL_AUTH_URL_NAMESPACE = 'social'
+# SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '1012213637416-rsktmsm7cleb2h87mcajgq3v6s602n14.apps.googleusercontent.com'
+# SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'

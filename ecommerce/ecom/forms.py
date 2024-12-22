@@ -21,7 +21,6 @@ class subcategory_form(forms.ModelForm):
         super(subcategory_form, self).__init__(*args, **kwargs)
         self.fields['category'].queryset = Category.objects.all()
 
-        # Add a disabled option to the queryset with the empty label
         choices = self.fields['category'].widget.choices
         choices = [("", "Select your category")] + list(choices)
         self.fields['category'].widget.choices = choices
