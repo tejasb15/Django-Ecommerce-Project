@@ -16,11 +16,11 @@ from datetime import date,timedelta,datetime
 import uuid
 import razorpay
 from django.views.decorators.csrf import csrf_exempt
-# from django.urls import reverse
-# from django.contrib.auth.tokens import default_token_generator
-# from django.template.loader import render_to_string
-# from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-# from django.utils.encoding import force_bytes, force_str
+from django.urls import reverse
+from django.contrib.auth.tokens import default_token_generator
+from django.template.loader import render_to_string
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_str
 
 # Create your views here.
 
@@ -880,11 +880,11 @@ def Login_view(request):
         return HttpResponseRedirect('/userindex/')
     else:
         if request.method == 'POST':
-            email = request.POST.get('email')
+            username = request.POST.get('username')
             password = request.POST.get('password')
             remember_me = request.POST.get('remember_me', False)
 
-            user = authenticate(request, email=email, password=password)
+            user = authenticate(request, username=username, password=password)
             print(user)
             if user is not None:
 
@@ -933,8 +933,8 @@ def password_reset_request(request):
                     }
                     email = render_to_string(email_template_name, c)
                     try:
-                        send_mail(subject, email, settings.DEFAULT_FROM_EMAIL, [user.email], fail_silently=False)
-                    except BadHeaderError:
+                        send_mail(subject, email, settings.DEFAULT_FROM_EMAIL, [ user.email], fail_silently=False)
+                    except Exception:
                         return HttpResponse('Invalid header found.')
                     return redirect("/password_reset_done/")
     password_reset_form = PasswordResetForm()

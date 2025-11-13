@@ -91,12 +91,12 @@ WSGI_APPLICATION = 'ecommerce.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'ecommerce',
-        'USER':'root',
-        'PASSWORD':'mysql@root',
+        'USER':'postgres',
+        'PASSWORD':'root',
         'HOST':'localhost',
-        'PORT':'3306',
+        'PORT':'5432',
     }
 }
 
@@ -147,7 +147,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'tejasbharambe1999@gmail.com'
-EMAIL_HOST_PASSWORD = 'oggf slxd lyry qiiz'
+EMAIL_HOST_PASSWORD = 'qfhz ixhz ipql wefe'
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'tejasbharambe1999@gmail.com'  
 
